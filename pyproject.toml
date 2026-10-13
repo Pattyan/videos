@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "omnivoice-duix"
+version = "0.1.0"
+description = "Puente entre OmniVoice (TTS) y Duix.Avatar (avatares con lip-sync)"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "fastapi>=0.110",
+    "uvicorn>=0.29",
+    "numpy",
+    "soundfile",
+    "requests",
+]
+
+[project.optional-dependencies]
+tts = ["omnivoice>=0.2.1"]
+dev = ["pytest", "httpx"]
+
+[project.scripts]
+omnivoice-duix-server = "omnivoice_duix.server:main"
+omnivoice-duix-video = "omnivoice_duix.cli:main"
+
+[tool.setuptools]
+packages = ["omnivoice_duix"]
