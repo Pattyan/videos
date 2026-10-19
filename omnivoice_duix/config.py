@@ -9,7 +9,9 @@ Siguen las convenciones de Duix.Avatar (src/main/config/config.js):
 import os
 from pathlib import Path
 
-DUIX_DATA = Path(os.environ.get("DUIX_DATA", Path.home() / "duix_avatar_data"))
+# En Windows, Duix.Avatar guarda sus datos en D:\duix_avatar_data.
+_DEFAULT_DUIX_DATA = Path("D:/duix_avatar_data") if os.name == "nt" else Path.home() / "duix_avatar_data"
+DUIX_DATA = Path(os.environ.get("DUIX_DATA", _DEFAULT_DUIX_DATA))
 
 # Raíz de datos del servicio TTS (lo que Duix monta en /code/data del contenedor TTS).
 VOICE_DATA = Path(os.environ.get("OMNIVOICE_DATA", DUIX_DATA / "voice" / "data"))

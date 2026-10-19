@@ -30,6 +30,15 @@ docker compose -f /ruta/Duix-Avatar/deploy/docker-compose-linux.yml \
                -f deploy/docker-compose.omnivoice.yml up -d
 ```
 
+En Windows (PowerShell), con Duix.Avatar clonado en tu carpeta de usuario:
+
+```powershell
+docker build -t omnivoice-duix .
+$env:OMNIVOICE_LANGUAGE = "es"
+docker compose -f $HOME\Duix-Avatar\deploy\docker-compose.yml `
+               -f deploy\docker-compose.omnivoice.windows.yml up -d
+```
+
 O sin Docker. Primero detén `duix-avatar-tts` para liberar el puerto 18180:
 
 ```bash
