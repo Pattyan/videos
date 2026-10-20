@@ -61,3 +61,13 @@ def test_error_de_duix(monkeypatch, tmp_path):
     monkeypatch.setattr(duix_client.requests, "get", lambda *a, **k: FakeResponse({"code": 10002, "msg": "sin rostro"}))
     with pytest.raises(DuixError, match="sin rostro"):
         DuixVideoClient(temp_dir=tmp_path).wait("c")
+
+
+def test_tts_main_solo_voz(monkeypatch, engine, tmp_path):
+    from omnivoice_duix import cli
+
+    monkeypatch.setattr(cli, "OmniVoiceEngine", lambda **kw: engine)
+    out = tmp_path / "voz.wav"
+    cli.tts_main(["--text", "Hola", "--instruct", "female", "--language", "es", "-o", str(out)])
+    assert out.read_bytes()[:4] == b"RIFF"
+    assert engine.calls[-1][1]["instruct"] == "female"

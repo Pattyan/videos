@@ -23,6 +23,7 @@ dev = ["pytest", "httpx"]
 [project.scripts]
 omnivoice-duix-server = "omnivoice_duix.server:main"
 omnivoice-duix-video = "omnivoice_duix.cli:main"
+omnivoice-tts = "omnivoice_duix.cli:tts_main"
 
 [tool.setuptools]
 packages = ["omnivoice_duix"]

@@ -88,5 +88,36 @@ def main(argv: Optional[list[str]] = None) -> None:
     print(f"Video listo: {out}")
 
 
+def tts_main(argv: Optional[list[str]] = None) -> None:
+    """Solo voz: texto → WAV con OmniVoice, sin Duix.Avatar (funciona sin GPU)."""
+    p = argparse.ArgumentParser(description="Genera un audio con OmniVoice (no necesita Duix ni GPU).")
+    text = p.add_mutually_exclusive_group(required=True)
+    text.add_argument("--text", help="texto a decir")
+    text.add_argument("--text-file", type=Path, help="archivo con el texto")
+    p.add_argument("-o", "--output", type=Path, default=Path("output/voz.wav"))
+    voice = p.add_mutually_exclusive_group()
+    voice.add_argument("--voice", type=Path, help="audio de 3-10 s para clonar la voz (o un .omnivoice.pt)")
+    voice.add_argument("--instruct", help='diseño de voz, p. ej. "female, low pitch"')
+    p.add_argument("--voice-text", help="transcripción del audio de --voice (si no, usa Whisper)")
+    p.add_argument("--language", default=config.OMNIVOICE_LANGUAGE, help="idioma, p. ej. es, en")
+    p.add_argument("--speed", type=float, help="velocidad (>1 más rápido)")
+    p.add_argument("--steps", type=int, default=config.OMNIVOICE_NUM_STEP, help="pasos de difusión (16 = más rápido)")
+    args = p.parse_args(argv)
+
+    engine = OmniVoiceEngine(num_step=args.steps)
+    print("Cargando OmniVoice (la primera vez descarga el modelo)...")
+    audio = engine.synthesize(
+        args.text if args.text else args.text_file.read_text(encoding="utf-8"),
+        ref_audio=args.voice,
+        ref_text=args.voice_text,
+        instruct=args.instruct,
+        language=args.language,
+        speed=args.speed,
+    )
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    sf.write(args.output, audio, engine.sampling_rate)
+    print(f"Audio listo: {args.output}")
+
+
 if __name__ == "__main__":
     main()

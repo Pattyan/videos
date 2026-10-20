@@ -71,6 +71,16 @@ omnivoice-duix-video --text-file guion.txt --avatar presentador.mp4 \
 
 `--voice` también acepta un `.omnivoice.pt` guardado por el servidor, así reutilizas la voz sin volver a codificarla.
 
+## Solo voz, sin GPU
+
+Si tu PC no tiene tarjeta NVIDIA, Duix.Avatar no funciona, pero OmniVoice sí, aunque más lento:
+
+```bash
+omnivoice-tts --text "Hola, esta es mi voz." --language es -o output/hola.wav
+omnivoice-tts --text "Hola" --voice muestra.wav --voice-text "lo que dice la muestra" --language es -o output/clon.wav
+omnivoice-tts --text "Hola" --instruct "female, low pitch" --language es --steps 16 -o output/disenada.wav
+```
+
 ## Configuración
 
 | Variable | Valor por defecto | Uso |
